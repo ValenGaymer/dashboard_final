@@ -184,105 +184,6 @@ dash.register_page(__name__)
 # CONTENIDOS
 
 
-esg_content = html.Div([
-    html.Br(),
-    html.H3('Análisis exploratorio sobre las variables asociadas al índice ESG'),
-    html.P(''),
-
-    html.Div(
-        dash_table.DataTable(
-            id='esg-table',
-            columns=[
-                {'name': 'Variable', 'id': 'variable'},
-                {'name': 'Tipo de dato', 'id': 'data_type'}
-            ],
-            data=[
-                {'variable': 'Symbol', 'data_type': 'categórica'},
-                {'variable': 'Name', 'data_type': 'categórica'},
-                {'variable': 'Address', 'data_type': 'categórica'},
-                {'variable': 'Sector', 'data_type': 'categórica'},
-                {'variable': 'Industry', 'data_type': 'categórica'},
-                {'variable': 'Full Time Employees', 'data_type': 'categórica'},
-                {'variable': 'Description', 'data_type': 'categórica'},
-                {'variable': 'Total ESG Risk Score', 'data_type': 'numérica'},
-                {'variable': 'Environment Risk Score', 'data_type': 'numérica'},
-                {'variable': 'Governance Risk Score', 'data_type': 'numérica'},
-                {'variable': 'Social Risk Score', 'data_type': 'numérica'},
-                {'variable': 'Controversy Level', 'data_type': 'categórica'},
-                {'variable': 'Controversy Score', 'data_type': 'numérica'},
-                {'variable': 'ESG Risk Percentile', 'data_type': 'categórica'},
-                {'variable': 'ESG Risk Level', 'data_type': 'categórica'},
-            ],
-            style_table={'overflowX': 'auto',
-                         'width': '50%',
-                         'margin':'auto'},
-            style_cell={
-                'textAlign': 'left',
-                'padding': '8px',
-            },
-            style_header={
-                'backgroundColor': '#ec6c64',
-                'color': 'white',
-                'fontWeight': 'bold',
-            },
-            style_data={
-                'backgroundColor': '#f8f9fa',
-            },
-        ),
-        className='table-responsive',
-    ), 
-    html. Hr(),
-    html.H4('Sector'),
-    dcc.Graph(
-        id='sector-frequency-bar',
-        figure=sector
-    ),
-    html.P('Los sectores predominantes son Industrials (Acciones industriales) y Technology (Tecnología), con frecuencias de 69 y 65 empresas, respectivamente. Por otro lado, se observa que los sectores Energy (Energía), Basic Materials (Materiales básicos), y Communication Services (Servicios de comunicación) tienen frecuencias bastante cercanas entre sí, siendo las más bajas con 20, 21 y 22 empresas, respectivamente. Esto indica que estos sectores son los que presentan menor representación en nuestro conjunto de datos.'),
-    html.Br(),
-    html.Hr(),
-    html.H4('Industrias por sector'),
-    dcc.Graph(
-        id='industries-per-sector-bar',
-        figure=industrysector
-    ),
-    html.P('Los sectores que presentan mayor diversidad de industrias son Consumer Cyclical (Consumo Cíclico) e Industrials (Acciones Industriales), con un total de 19 y 18 industrias diferentes, respectivamente. Por otro lado, los sectores con menor variabilidad son Communication Services (Servicios de Comunicación) y Energy (Energía), que cuentan únicamente con 5 industrias distintas cada uno. Esto sugiere que, en términos generales, la cantidad de industrias variadas entre los sectores no es considerable, ya que, de un total de 112 industrias, la mayor variabilidad es de solo 19, lo que representa aproximadamente solo un 17% del total.'),
-    html.Br(),
-    html.Hr(),
-    html.H4('Empleados de diempo completo'),
-    dcc.Graph(
-        id='full-time-employees-boxplot',
-        figure=employees
-    ),
-    html.P('Se observa una gran diferencia entre los valores extremos pues la cantidad mínima de empleados es de 28, mientras que la máxima es de 2100000. Esto sugiere que algunas empresas cuentan con una cantidad de empleados significativamente mayor que las demás, lo que contribuye a la elevada variabilidad de los datos. En cuanto a las medidas de tendencia central, la media es de 61240 con una desviación estándar considerable de 144404, lo que refleja la amplia dispersión en los datos. Esta alta variabilidad podemos decir que se debe a la diferencia entre los valores más altos y bajos. Por ello, la mediana de 22300 empleados, es un indicador más representativo del tamaño típico de las empresas, ya que no se ve tan afectada por los valores extremos. Esto indica que la mayoría de las empresas tienen una cantidad de empleados significativamente menor que la media.'),
-    html.Br(),
-    html.Hr(),
-    html.H4('Puntajes de riesgo'),
-    dcc.Graph(
-        id='risk-score-hist',
-        figure=plos
-    ),
-    html.P('Las empresas presentan una puntuación de riesgo ESG general en un rango de riesgo medio, con un valor promedio de 21.5 y una desviación estándar de 6.8, lo que indica una variabilidad moderada. Además, el valor mínimo de 7.1 sugiere que al menos una empresa se encuentra dentro de un rango de riesgo insignificante, mientras que el valor máximo de 41.7 indica que existe al menos una compañía con un riesgo severo. Al analizar los cuartiles, se evidencia que, a gran escala, las empresas están relativamente bien posicionadas, ya que el 75% de ellas tiene una puntuación de 26 o inferior. Esto implica que la mayoría de las empresas no sobrepasan el umbral de riesgo medio y se encuentran considerablemente alejadas de los puntajes más elevados, lo que sugiere una gestión efectiva de los riesgos ESG en la mayoría de estas compañías.'),
-    dcc.Graph(
-        id='risk-scores-histogram',
-        figure=histogram_fig
-    ),
-    html.P('En nuestro conjunto de datos, el promedio del puntaje de riesgo ambiental de las compañías es de 5.7, con una desviación estándar de 5. Esto indica que, en general, el riesgo ambiental se encuentra dentro de la categoría de riesgo insignificante. Es importante destacar que hay al menos una compañía con un puntaje de 0, lo que refleja un manejo ambiental perfecto y la ausencia de impactos negativos. Además, el puntaje máximo registrado en este conjunto de datos es de 25, lo que sugiere que ninguna empresa supera el riesgo medio según la escala de clasificación establecida. Asimismo, podemos afirmar que la mayoría de las compañías presentan un riesgo ambiental insignificante, ya que el 75% de los puntajes es menor o igual a 8.8. '),
-    html.P('Para el componente de gobernanza de las empresas, hemos encontrado que el puntaje promedio es de 6.72, con una desviación estándar de 2.21. Esto indica que, en general, las compañías se encuentran dentro del rango de riesgo insignificante. Esto se ve respaldado por los valores del segundo y tercer cuartil, que son de 6.1 y 7.6, respectivamente. Esto sugiere que la mayoría de los puntajes de gobernanza se agrupan en torno a niveles que indican un riesgo insignificante. Sin embargo, es importante señalar que no todas las empresas presentan pertencen a este rango, ya que el puntaje máximo registrado es de 19.4, lo que implica que al menos una compañía tiene un puntaje que la clasifica en el rango de riesgo medio.'),
-    html.P('En promedio, el puntaje de riesgo social de las compañías incluidas en este estudio es de 9, con una desviación estándar de 3.6. Esto sugiere una variabilidad moderada en los puntajes de riesgo social entre las empresas analizadas. El puntaje mínimo registrado es de 0.8, mientras que el puntaje máximo alcanza 22.5. Esto indica que algunas empresas se encuentran en la categoría de riesgo insignificante, mientras que otras presentan un riesgo más significativo, clasificándose en el rango de riesgo medio. Además, observamos que el 75% de las empresas tiene un puntaje igual o inferior a 11.2. Esto implica que también hay al menos una compañía que se sitúa en un nivel de riesgo bajo.'),
-    dcc.Graph(
-        id='esg-risk-correlations',
-        figure=fig
-    ),
-    html.Br(),
-    html.H5('Niveles de riesgo'),
-    dcc.Graph(
-        id='esg-risk-level',
-        figure=risk_level_fig
-    ),
-    html.P('Podemos observar que la mayoría de las compañías se concentran en los niveles de riesgo Medium (medio o moderado) y Low (bajo), con 180 y 178 empresas respectivamente. Esto sugiere que, en general, las empresas están iniciando o ya han implementado mejoras en sus estrategias relacionadas con la sostenibilidad y la gestión de riesgos ESG. En contraste, los demás niveles de riesgo, como High (alto), Negligible (insignificante) y Severe (severo), presentan frecuencias considerablemente más bajas en comparación con los dos predominantes, lo que refuerza la tendencia hacia una gestión más responsable y consciente de los riesgos ambientales y sociales.'),
-
-])
-
 financial_content = html.Div([
     html.Br(),
     html.H3('Análisis exploratorio sobre las variables asociadas a retornos'),
@@ -305,62 +206,113 @@ financial_content = html.Div([
 
 
 
-# DASH
-
 layout = html.Div([
-    dcc.Tabs(
-        id='tabs',
-        value='esg',  # Valor inicial
-        style={'border': 'none'},
-        children=[
-            dcc.Tab(
-                label='ESG',
-                value='esg',
-                className='m-1',
-                selected_className='active-tab',
-                style={
-                    'padding': '10px',
-                    'backgroundColor': '#f8f9fa',
-                    'color': '#333',
-                    'border': 'none'
-                },
-                selected_style={
-                    'padding': '10px',
-                    'backgroundColor': '#ec6c64',
-                    'color': 'white',
-                    'border': 'none'
-                }
-            ),
-            dcc.Tab(
-                label='Financial',
-                value='financial',
-                className='m-1',
-                selected_className='active-tab',
-                style={
-                    'padding': '10px',
-                    'backgroundColor': '#f8f9fa',
-                    'color': '#333',
-                    'border': 'none'
-                },
-                selected_style={
-                    'padding': '10px',
-                    'backgroundColor': '#ec6c64',
-                    'color': 'white',
-                    'border': 'none'
-                }
-            ),
-        ],
-    ),
-    html.Div(id='tabs-content'),
+    dbc.Row([
+        dbc.Col([
+            dbc.ButtonGroup(  # Uso de ButtonGroup de Bootstrap para los tabs
+                [
+                    dbc.Button("ESG", id="btn-esg", color="primary", className="mr-1", n_clicks=0),
+                    dbc.Button("Financial", id="btn-financial", color="primary", className="mr-1", n_clicks=0),
+                ],
+                size="lg",
+                className="d-flex justify-content-center"  # Centra los botones
+            )
+        ], width=12)
+    ]),
+    html.Br(),
+    html.Div(id='tabs-content'),  # Aquí se mostrará el contenido dinámico
 ])
+
 
 @dash.callback(
     Output('tabs-content', 'children'),
-    Input('tabs', 'value')
+    [Input('btn-esg', 'n_clicks'), Input('btn-financial', 'n_clicks')]
 )
+def render_content(btn_esg, btn_financial):
+    if btn_esg >= btn_financial:
+        return html.Div([
+            html.Br(),
+            dcc.Dropdown(
+                id='esg-dropdown',
+                options=[
+                    {'label': 'Tabla con Variables', 'value': 'table'},
+                    {'label': 'Sector', 'value': 'sector'},
+                    {'label': 'Industrias por Sector', 'value': 'industries'},
+                    {'label': 'Empleados de Tiempo Completo', 'value': 'employees'},
+                    {'label': 'Puntajes de Riesgo', 'value': 'risk_scores'},
+                    {'label': 'Niveles de Riesgo', 'value': 'risk_levels'},
+                ],
+                value='table',  # Valor por defecto
+                clearable=False,
+            ),
+            html.Br(),
+            html.Div(id='esg-content')
+        ])
+    elif btn_financial > btn_esg:
+        return html.Div([financial_content])  # Muestra el contenido financiero
 
-def render_content(tab):
-    if tab == 'esg':
-        return esg_content
-    elif tab == 'financial':
-        return financial_content
+
+
+
+
+@dash.callback(
+    Output('esg-content', 'children'),
+    Input('esg-dropdown', 'value')
+)
+def render_esg_content(selected_option):
+    if selected_option == 'table':
+        return html.Div([
+            dash_table.DataTable(
+                id='esg-table',
+                columns=[
+                    {'name': 'Variable', 'id': 'variable'},
+                    {'name': 'Tipo de dato', 'id': 'data_type'}
+                ],
+                data=[
+                    {'variable': 'Symbol', 'data_type': 'categórica'},
+                    {'variable': 'Name', 'data_type': 'categórica'},
+                    {'variable': 'Address', 'data_type': 'categórica'},
+                    {'variable': 'Sector', 'data_type': 'categórica'},
+                    {'variable': 'Industry', 'data_type': 'categórica'},
+                    {'variable': 'Full Time Employees', 'data_type': 'numérica'},
+                    {'variable': 'Total ESG Risk Score', 'data_type': 'numérica'},
+                    {'variable': 'Environment Risk Score', 'data_type': 'numérica'},
+                    {'variable': 'Governance Risk Score', 'data_type': 'numérica'},
+                    {'variable': 'Social Risk Score', 'data_type': 'numérica'},
+                    {'variable': 'Controversy Level', 'data_type': 'categórica'},
+                    {'variable': 'Controversy Score', 'data_type': 'numérica'},
+                    {'variable': 'ESG Risk Percentile', 'data_type': 'categórica'},
+                    {'variable': 'ESG Risk Level', 'data_type': 'categórica'},
+                ],
+                style_table={'overflowX': 'auto', 'width': '80%', 'margin': 'auto'},
+                style_cell={'textAlign': 'left', 'padding': '8px'},
+                style_header={'backgroundColor': '#ec6c64', 'color': 'white', 'fontWeight': 'bold'},
+                style_data={'backgroundColor': '#f8f9fa'},
+            )
+        ])
+    
+    elif selected_option == 'sector':
+        return html.Div([
+            dcc.Graph(figure=sector),
+            html.P('Los sectores predominantes son Industrials (Acciones industriales) y Technology (Tecnología), con frecuencias de 69 y 65 empresas, respectivamente. Por otro lado, se observa que los sectores Energy (Energía), Basic Materials (Materiales básicos), y Communication Services (Servicios de comunicación) tienen frecuencias bastante cercanas entre sí, siendo las más bajas con 20, 21 y 22 empresas, respectivamente. Esto indica que estos sectores son los que presentan menor representación en nuestro conjunto de datos.')
+        ])
+    elif selected_option == 'industries':
+        return html.Div([
+            dcc.Graph(figure=industrysector),
+            html.P('Los sectores que presentan mayor diversidad de industrias son Consumer Cyclical (Consumo Cíclico) e Industrials (Acciones Industriales), con un total de 19 y 18 industrias diferentes, respectivamente. Por otro lado, los sectores con menor variabilidad son Communication Services (Servicios de Comunicación) y Energy (Energía), que cuentan únicamente con 5 industrias distintas cada uno. Esto sugiere que, en términos generales, la cantidad de industrias variadas entre los sectores no es considerable, ya que, de un total de 112 industrias, la mayor variabilidad es de solo 19, lo que representa aproximadamente solo un 17% del total.')])
+    elif selected_option == 'employees':
+        return html.Div([
+            dcc.Graph(figure=employees),
+            html.P('Se observa una gran diferencia entre los valores extremos pues la cantidad mínima de empleados es de 28, mientras que la máxima es de 2100000. Esto sugiere que algunas empresas cuentan con una cantidad de empleados significativamente mayor que las demás, lo que contribuye a la elevada variabilidad de los datos. En cuanto a las medidas de tendencia central, la media es de 61240 con una desviación estándar considerable de 144404, lo que refleja la amplia dispersión en los datos. Esta alta variabilidad podemos decir que se debe a la diferencia entre los valores más altos y bajos. Por ello, la mediana de 22300 empleados, es un indicador más representativo del tamaño típico de las empresas, ya que no se ve tan afectada por los valores extremos. Esto indica que la mayoría de las empresas tienen una cantidad de empleados significativamente menor que la media.')])
+    elif selected_option == 'risk_scores':
+        return html.Div([
+            dcc.Graph(figure=plos),
+            html.P('Las empresas presentan una puntuación de riesgo ESG general en un rango de riesgo medio, con un valor promedio de 21.5 y una desviación estándar de 6.8, lo que indica una variabilidad moderada. Además, el valor mínimo de 7.1 sugiere que al menos una empresa se encuentra dentro de un rango de riesgo insignificante, mientras que el valor máximo de 41.7 indica que existe al menos una compañía con un riesgo severo. Al analizar los cuartiles, se evidencia que, a gran escala, las empresas están relativamente bien posicionadas, ya que el 75% de ellas tiene una puntuación de 26 o inferior. Esto implica que la mayoría de las empresas no sobrepasan el umbral de riesgo medio y se encuentran considerablemente alejadas de los puntajes más elevados, lo que sugiere una gestión efectiva de los riesgos ESG en la mayoría de estas compañías.'),
+            dcc.Graph(figure = histogram_fig),
+            html.P('La mayoría de las empresas en el estudio presentan riesgos insignificantes, aunque algunos casos aislados registran niveles de riesgo medio.'),
+            dcc.Graph(figure= fig)])
+    elif selected_option == 'risk_levels':
+        return html.Div([
+            dcc.Graph(figure=risk_level_fig),
+            html.P('Podemos observar que la mayoría de las compañías se concentran en los niveles de riesgo Medium (medio o moderado) y Low (bajo), con 180 y 178 empresas respectivamente. Esto sugiere que, en general, las empresas están iniciando o ya han implementado mejoras en sus estrategias relacionadas con la sostenibilidad y la gestión de riesgos ESG. En contraste, los demás niveles de riesgo, como High (alto), Negligible (insignificante) y Severe (severo), presentan frecuencias considerablemente más bajas en comparación con los dos predominantes, lo que refuerza la tendencia hacia una gestión más responsable y consciente de los riesgos ambientales y sociales.')
+        ])
